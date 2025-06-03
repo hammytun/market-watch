@@ -1,0 +1,99 @@
+body {
+    /* Gradient from a deep indigo to a tealish-blue */
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    /* Ensure content is readable on top of the gradient */
+    color: #fff;
+    /* Keep the same overall layout */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+h1 {
+    padding-left: 515px;
+    font-size: 1.5rem;
+    width: 650px;
+}
+#news {
+    max-width: 600px;
+    margin: 2em auto;
+    text-align: center;
+}
+#news ul {
+    list-style: none;
+    padding-left: 0;
+}
+/* Style each list item as a softly rounded box with a border */
+#news li {
+    margin-bottom: 1em;
+    border: 1px solid #ccc;        /* light gray border */
+    border-radius: 8px;            /* rounded corners */
+    padding: 0.75em 1em;           /* some inner breathing room */
+    background-color: #fafafa;     /* very light background */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* subtle drop shadow */
+    transition: box-shadow 0.2s ease;
+}
+/* On hover, lift the box slightly */
+#news li:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+/* Link styling inside the box */
+#news a {
+    text-decoration: none;
+    color: #0366d6;
+    font-weight: bold;
+}
+#news a:hover {
+    text-decoration: underline;
+}
+/* Date text inside the box */
+#news span {
+    display: block;
+    margin-top: 0.5em;
+    font-size: 0.9rem;
+    color: #666;
+}
+footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.6);
+	font-size: 1rem;
+	z-index: 10;
+}
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+.navbar {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+}
+  
+  /* Links inside the navbar */
+.navbar a {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+  
+  /* Change background on mouse-over */
+.navbar a:hover {
+    color: #00e0ff;
+}
+  
+  /* Main content */
+.main {
+    margin-top: 10px; /* Add a top margin to avoid content overlay */
+}
+.space {
+    padding: 30px;
+}

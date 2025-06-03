@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketWatch: Advanced Auto Parts News</title>
+  <link rel="stylesheet" type="text/css" href="breakingNews.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="updates.html">Updates</a>
+        <a href="bulletins.html">Bulletins</a>
+        <a href="topstories.html">Top Stories</a>
+        <a href="landingPage.html">Home</a>
+    </div>
+    <div class="space"></div>
+  <h1>MarketWatch: Real Time Headlines</h1>
+  <div id="news">
+    <p>Loading…</p>
+  </div>
+
+  <script>
+    // 1. MarketWatch “Top Stories” RSS feed (personal, non-commercial use) :contentReference[oaicite:0]{index=0}
+    const MW_TOP_STORIES_RSS = 'https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines';
+
+    // 2. Because MarketWatch blocks cross-origin requests, we use a simple CORS proxy.
+    //    In production, replace with your own serverless proxy or backend endpoint. 
+    const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
+    async function loadMarketWatchNews() {
+      const container = document.getElementById('news');
+      container.innerHTML = '<p>Loading…</p>';
+
+      try {
+        // Fetch the raw RSS XML via proxy
+        const response = await fetch(CORS_PROXY + encodeURIComponent(MW_TOP_STORIES_RSS));
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} fetching RSS`);
+        }
+        const xmlText = await response.text();
+
+        // Parse XML into a DOM
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+        const items = Array.from(xmlDoc.querySelectorAll('item'));
+
+        // Filter for “Advanced Auto Parts” (case-insensitive) in title or description
+        const matches = items
+          .map(item => {
+            const title = item.querySelector('title')?.textContent || '';
+            const link  = item.querySelector('link')?.textContent || '';
+            const pubDate = item.querySelector('pubDate')?.textContent || '';
+            const description = item.querySelector('description')?.textContent || '';
+            return { title, link, pubDate, description };
+          })
+        //   .filter(entry =>
+        //     /stock/i.test(entry.title) ||
+        //     /stock/i.test(entry.description)
+        //   );
+
+        if (matches.length === 0) {
+          container.innerHTML = '<p>No recent MarketWatch Top Stories mention “Advanced Auto Parts.”</p>';
+          return;
+        }
+
+        // Build a simple <ul> of matching links
+        const ul = document.createElement('ul');
+        matches.forEach(({ title, link, pubDate }) => {
+          const li = document.createElement('li');
+          const a  = document.createElement('a');
+          a.href        = link;
+          a.textContent = title;
+          a.target      = '_blank';
+          li.appendChild(a);
+
+          if (pubDate) {
+            const span = document.createElement('span');
+            // Convert pubDate to “MM/DD/YYYY” for clarity
+            span.textContent = `(Published: ${new Date(pubDate).toLocaleDateString()})`;
+            li.appendChild(span);
+          }
+
+          ul.appendChild(li);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(ul);
+      } catch (err) {
+        container.innerHTML = `<p>Error loading news: ${err.message}</p>`;
+        console.error(err);
+      }
+    }
+
+    // Run on initial page load
+    window.addEventListener('DOMContentLoaded', loadMarketWatchNews);
+
+    // Optional: re-fetch every 5 minutes
+    // setInterval(loadMarketWatchNews, 1000 * 60 * 5);
+  </script>
+<footer class="foot">For more, Check out <a href=https://nnnig.com>Triple Net Investments</a></footer>
+</body>
+</html>
