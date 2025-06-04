@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MarketWatch: Advanced Auto Parts News</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar">
@@ -20,11 +21,11 @@
   </div>
 
   <script>
-    // 1. MarketWatch “Top Stories” RSS feed (personal, non-commercial use) :contentReference[oaicite:0]{index=0}
+    /* link to the RSS Feed Top Stories from Market Watch */
     const MW_TOP_STORIES_RSS = 'http://feeds.marketwatch.com/marketwatch/topstories/';
 
-    // 2. Because MarketWatch blocks cross-origin requests, we use a simple CORS proxy.
-    //    In production, replace with your own serverless proxy or backend endpoint. 
+   /* Because MarketWatch blocks cross-origin requests, we use a simple CORS proxy. Eventually, we will replace with our own server
+   */ 
     const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
     async function loadMarketWatchNews() {
@@ -32,7 +33,7 @@
       container.innerHTML = '<p>Loading…</p>';
 
       try {
-        // Fetch the raw RSS XML via proxy
+        // Fetch the RSS XML via proxy
         const response = await fetch(CORS_PROXY + encodeURIComponent(MW_TOP_STORIES_RSS));
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} fetching RSS`);
@@ -44,7 +45,7 @@
         const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
         const items = Array.from(xmlDoc.querySelectorAll('item'));
 
-        // Filter for “Advanced Auto Parts” (case-insensitive) in title or description
+        // Filter for keywords (case-insensitive) in title or description
         const matches = items
           .map(item => {
             const title = item.querySelector('title')?.textContent || '';
@@ -53,10 +54,6 @@
             const description = item.querySelector('description')?.textContent || '';
             return { title, link, pubDate, description };
           })
-        //   .filter(entry =>
-        //     /stock/i.test(entry.title) ||
-        //     /stock/i.test(entry.description)
-        //   );
 
         if (matches.length === 0) {
           container.innerHTML = '<p>No recent MarketWatch Top Stories mention “Advanced Auto Parts.”</p>';
@@ -94,8 +91,6 @@
     // Run on initial page load
     window.addEventListener('DOMContentLoaded', loadMarketWatchNews);
 
-    // Optional: re-fetch every 5 minutes
-    // setInterval(loadMarketWatchNews, 1000 * 60 * 5);
   </script>
 <footer class="foot">For more, Check out <a href=https://nnnig.com>Triple Net Investments</a></footer>
 </body>
